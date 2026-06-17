@@ -1,0 +1,59 @@
+<Project Sdk="Dalamud.NET.Sdk/15.0.0">
+
+  <PropertyGroup>
+    <!--
+      Match the Dalamud.NET.Sdk version (and TargetFramework) to the Dalamud you build
+      against. Dev Dalamud is 15.x on .NET 10, so SDK 15.0.0 + net10.0-windows. A
+      mismatch trips CS1705 (System.Runtime 10 vs 9) and a false "outdated and
+      incompatible" banner. Copy these two values from a known-good plugin (HOutfits)
+      if anything ever drifts.
+    -->
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Platforms>x64</Platforms>
+    <Version>0.1.0.0</Version>
+
+    <!--
+      Manifest metadata lives HERE, not in a hand-written .json. The Dalamud.NET.Sdk
+      generates HClawsweep.json at build time and stamps the correct DalamudApiLevel
+      from the SDK. Author is SINGULAR; Tags/CategoryTags are semicolon-separated;
+      AssemblyVersion is what the manifest reports. InternalName is the repo/package
+      identity (HClawsweep); Name is the friendlier installer-facing label (Cosmic Claw).
+    -->
+    <Name>Cosmic Claw</Name>
+    <InternalName>HClawsweep</InternalName>
+    <Author>The Enceladeum</Author>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <Punchline>Haha claw goes whoosh</Punchline>
+    <Description>Unlocks the Cosmic Predator's Magitek Claw sweep animation locally (client-side only, no server round-trip). Commands: /clawsweep (one-time) and /clawsweeploop (loop).</Description>
+    <RepoUrl>https://github.com/Enceladeum/HClawsweep</RepoUrl>
+    <Tags>cosmic;mount;animation;predator</Tags>
+    <CategoryTags>other</CategoryTags>
+
+    <!--
+      IconUrl is what gives the INSTALLED plugin its icon: Dalamud downloads it from the
+      manifest's IconUrl for a repo-installed (third-party) plugin. Without it the
+      installed plugin shows a "?" placeholder even though the installer LISTING icon
+      (repo.json's own IconUrl) resolves fine. The generated manifest only carries this
+      if the property is non-empty. Keep it identical to repo.json's IconUrl, and make
+      sure the file actually lives at images/icon.png on 'main' so the raw URL resolves.
+      Do NOT try to bundle icon.png into latest.zip — DalamudPackager strips it from the
+      zip by design; this URL is the only path to an installed icon.
+    -->
+    <IconUrl>https://raw.githubusercontent.com/Enceladeum/HClawsweep/main/images/icon.png</IconUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--
+      Copy images/icon.png next to the built DLL so a LOCAL DEV build (loaded via
+      Dalamud's Dev Plugin Locations) shows its icon — that path reads images/icon.png
+      from the DLL's own folder. This serves the dev-load case ONLY; it does not put the
+      icon in latest.zip and is not how an installed plugin gets its icon (that is the
+      manifest IconUrl above).
+    -->
+    <None Include="images\icon.png" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>
