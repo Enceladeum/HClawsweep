@@ -9,10 +9,12 @@ Distributed as the **HClawsweep** plugin.
 
 ## Commands
 
-- `/clawsweep` — play the claw sweep **once**, then settle back to idle.
-- `/clawsweeploop` — **toggle** a continuous sweep. Run it again, or just move, to stop.
+- `/clawsweep` plays the claw sweep once, then settles back to idle.
+- `/clawsweeploop` toggles a continuous sweep. Run it again (or dismount) to stop; moving
+  around won't interrupt it.
 
-You must be mounted on the Cosmic Predator; otherwise the command tells you so.
+You must be mounted on a Magitek Predator (Cosmic or standard); otherwise the command tells
+you so.
 
 ## Installing
 
@@ -37,22 +39,30 @@ You must be mounted on the Cosmic Predator; otherwise the command tells you so.
 
 ## How it works
 
-The Cosmic Predator's claw sweep is `ActionTimeline` row **15140**. While you're mounted
-on it (Mount row **440**), the plugin plays that timeline directly on the **ridden mount
-object** via `TimelineContainer.PlayActionTimeline(intro, loop)`:
+The Magitek Predator's claw sweep is `ActionTimeline` row **15140**. While you're mounted
+(the Cosmic Predator is Mount row **440**; the standard Magitek Predator is row **121**, a
+reskin that shares the same animations), the plugin plays that timeline directly on the
+**ridden mount object** via `TimelineContainer.PlayActionTimeline(intro, loop)`:
 
-- **single** → `PlayActionTimeline(15140, 0)`: the sweep plays once, then the loop slot
-  falls back to base/idle.
-- **loop** → `PlayActionTimeline(15140, 15140)`: the sweep slot repeats until you toggle
-  off, dismount, or move.
+- **single** is `PlayActionTimeline(15140, 0)`: the sweep plays once, then the loop slot
+  settles back to base/idle.
+- **loop** keeps the sweep going. Row 15140 is a one-shot timeline that does not
+  self-repeat, so a plain `PlayActionTimeline(15140, 15140)` plays it through only once
+  and stops. Instead the plugin watches the mount's animation slots from the framework
+  update and re-asserts the sweep whenever it has left every slot. Re-asserting after the
+  fact, rather than fighting the animation controller each frame, is what lets running,
+  jumping and rotating play out without ever interrupting the loop.
 
-No action request is sent to the server, so there's no grant/unlock that can fail — the
-animation just plays on your client. The companion **Predatory Dash** is deliberately
-*not* implemented: it's a displacement (position change), and there's no server-safe way
-to author that purely client-side.
+No action request is sent to the server, so there's no grant or unlock that can fail; the
+animation just plays on your client. By the same token other players don't see it: a
+purely client-side timeline is never broadcast, and appearance-sync tools (Mare, Lightless
+and the like) sync files and glamour, not local animation events.
 
-Everything that touches game memory runs on the framework thread, and the plugin drops
-any running loop back to idle when it unloads.
+The companion **Predatory Dash** is deliberately *not* implemented: it's a displacement (a
+position change), and there's no server-safe way to author that purely client-side.
+
+Everything that touches game memory runs on the framework thread, and the plugin drops any
+running loop back to idle when it unloads.
 
 ## Building
 
@@ -67,8 +77,11 @@ no hand-written `.json`. Load `bin/Release/HClawsweep.dll` as a dev plugin.
 
 ## Caveats
 
-- Only works while you're mounted on the **Cosmic Predator**.
-- The data values (`Mount` 440, `ActionTimeline` 15140) are game-data specific; if a
+- Only works while you're mounted on a **Magitek Predator** (Cosmic row 440 or standard
+  row 121).
+- Other players can't see the sweep. It plays only on your client; there's no server-side
+  trigger for a sync tool to relay, so VFX sync won't carry it to a friend.
+- The data values (`Mount` 440/121, `ActionTimeline` 15140) are game-data specific; if a
   patch shuffles them and the sweep stops playing, those are the first things to
   re-check.
 

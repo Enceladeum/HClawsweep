@@ -13,7 +13,7 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Platforms>x64</Platforms>
-    <Version>0.1.0.0</Version>
+    <Version>0.1.1.0</Version>
 
     <!--
       Manifest metadata lives HERE, not in a hand-written .json. The Dalamud.NET.Sdk
@@ -25,9 +25,9 @@
     <Name>Cosmic Claw</Name>
     <InternalName>HClawsweep</InternalName>
     <Author>The Enceladeum</Author>
-    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <AssemblyVersion>0.1.1.0</AssemblyVersion>
     <Punchline>Haha claw goes whoosh</Punchline>
-    <Description>Unlocks the Cosmic Predator's Magitek Claw sweep animation locally (client-side only, no server round-trip). Commands: /clawsweep (one-time) and /clawsweeploop (loop).</Description>
+    <Description>Play the Cosmic Predator's Magitek Claw Sweep animation on demand, once or on a loop, while you're riding it. Purely cosmetic and local-only; nothing is sent to the server. Works on both the Cosmic Predator and the standard Magitek Predator. Commands: /clawsweep and /clawsweeploop.</Description>
     <RepoUrl>https://github.com/Enceladeum/HClawsweep</RepoUrl>
     <Tags>cosmic;mount;animation;predator</Tags>
     <CategoryTags>other</CategoryTags>
