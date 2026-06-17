@@ -1,7 +1,7 @@
 # Cosmic Claw
 
-Play the **Cosmic Predator**'s Magitek *Claw Sweep* animation on demand — once, or on
-a loop — while you're riding it. Purely cosmetic and **local-only**: nothing is sent to
+Play the **Cosmic Predator**'s Magitek *Claw Sweep* animation on demand once, or on
+a loop while you're riding it. Purely cosmetic and **local-only**: nothing is sent to
 the server, so there's no unlock to earn and nothing for other players' clients to
 validate.
 
